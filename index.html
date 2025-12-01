@@ -28,6 +28,7 @@
       --color-red-500: #c0152f;
       --color-orange-400: #e68161;
       --color-orange-500: #a84b2f;
+      --color-gray-500: #9ca3af;
 
       --color-background: var(--color-cream-50);
       --color-surface: var(--color-cream-100);
@@ -124,8 +125,6 @@
       margin: 0;
     }
 
-    /* Layout */
-
     .app {
       display: flex;
       flex-direction: column;
@@ -133,89 +132,44 @@
     }
 
     .app-header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      background: linear-gradient(to bottom, var(--color-surface), rgba(255, 255, 255, 0.9));
-      border-bottom: 1px solid rgba(94, 82, 64, 0.12);
-      padding: var(--space-10) var(--space-16);
+      background: var(--color-surface);
+      border-bottom: 1px solid var(--color-card-border);
+      padding: var(--space-12) var(--space-12);
       display: flex;
-      flex-direction: column;
-      gap: var(--space-8);
-      backdrop-filter: blur(16px);
-    }
-
-    .header-top-row {
-      display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       gap: var(--space-8);
     }
 
-    .header-title-group {
+    .app-title {
       display: flex;
       flex-direction: column;
       gap: var(--space-2);
     }
 
-    .header-title {
-      display: flex;
-      align-items: center;
-      gap: var(--space-8);
+    .app-title h1 {
+      font-size: var(--font-size-xl);
     }
 
-    .header-subtitle {
+    .app-subtitle {
       font-size: var(--font-size-xs);
       color: var(--color-text-secondary);
     }
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-4);
-      font-size: var(--font-size-xs);
-      padding: var(--space-2) var(--space-8);
-      border-radius: var(--radius-full);
-      border: 1px solid rgba(94, 82, 64, 0.16);
-      background: rgba(255, 255, 255, 0.8);
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--color-error);
-    }
-
-    .status-dot.connected {
-      background: var(--color-success);
-    }
-
-    .header-actions {
+    .app-header-actions {
       display: flex;
-      align-items: center;
       gap: var(--space-8);
-    }
-
-    .project-pill {
-      font-size: var(--font-size-xs);
-      padding: var(--space-4) var(--space-10);
-      border-radius: var(--radius-full);
-      background: rgba(33, 128, 141, 0.06);
-      color: var(--color-text);
-      border: 1px solid rgba(33, 128, 141, 0.2);
-      max-width: 160px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      align-items: center;
     }
 
     .app-body {
       flex: 1;
-      padding: var(--space-10) var(--space-12) var(--space-16);
+      padding: var(--space-12) var(--space-12) var(--space-16);
       display: flex;
       flex-direction: column;
       gap: var(--space-12);
+      max-width: 100%;
+      overflow-y: auto;
     }
 
     .card {
@@ -245,6 +199,89 @@
       font-size: var(--font-size-xs);
       color: var(--color-text-secondary);
       margin-top: var(--space-4);
+    }
+
+    /* GitHub Sync Button */
+
+    .github-sync-button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-8);
+      padding: var(--space-10) var(--space-12);
+      background: var(--color-surface);
+      border: 1px solid var(--color-card-border);
+      border-radius: var(--radius-base);
+      cursor: pointer;
+      transition: all 150ms ease;
+      width: 100%;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+    }
+
+    .github-sync-button:hover {
+      border-color: var(--color-primary);
+      background: rgba(33, 128, 141, 0.04);
+    }
+
+    .github-button-left {
+      display: flex;
+      align-items: center;
+      gap: var(--space-8);
+    }
+
+    .status-indicator {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: var(--color-gray-500);
+      transition: background-color 200ms ease;
+    }
+
+    .status-indicator.connected {
+      background: var(--color-success);
+    }
+
+    .github-button-text {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      text-align: left;
+    }
+
+    .github-button-label {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .github-button-status {
+      font-size: var(--font-size-xs);
+      color: var(--color-text-secondary);
+    }
+
+    .chevron {
+      transition: transform 150ms ease;
+      font-size: 14px;
+      color: var(--color-text-secondary);
+    }
+
+    .chevron.open {
+      transform: rotate(90deg);
+    }
+
+    /* GitHub Panel (Collapsible) */
+
+    .github-panel {
+      display: none;
+      flex-direction: column;
+      gap: var(--space-12);
+      margin-top: var(--space-12);
+      padding-top: var(--space-12);
+      border-top: 1px solid var(--color-card-border);
+    }
+
+    .github-panel.open {
+      display: flex;
     }
 
     /* Form */
@@ -415,93 +452,33 @@
       font-size: 16px;
     }
 
-    /* GitHub setup (collapsible) */
+    /* Recent Entry Card */
 
-    .github-setup {
-      margin-top: var(--space-4);
-    }
-
-    .github-toggle {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-8);
-      cursor: pointer;
-    }
-
-    .github-toggle-label {
-      display: flex;
-      align-items: center;
-      gap: var(--space-6);
-      font-size: var(--font-size-sm);
-      color: var(--color-text-secondary);
-    }
-
-    .chevron {
-      transition: transform 150ms ease;
-      font-size: 14px;
-    }
-
-    .chevron.open {
-      transform: rotate(90deg);
-    }
-
-    .github-panel {
-      margin-top: var(--space-10);
-      display: none;
-      flex-direction: column;
-      gap: var(--space-10);
-    }
-
-    .github-panel.open {
-      display: flex;
-    }
-
-    /* Recent entries list */
-
-    .entries-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: var(--space-8);
-    }
-
-    .entries-list {
-      max-height: 260px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-8);
-      padding-right: 2px;
-    }
-
-    .entry-card {
+    .recent-entry-card {
       border-radius: var(--radius-md);
-      border: 1px solid rgba(94, 82, 64, 0.14);
-      padding: var(--space-10) var(--space-12);
+      border: 1px solid rgba(33, 128, 141, 0.2);
+      padding: var(--space-12) var(--space-12);
       background: linear-gradient(
         135deg,
-        rgba(33, 128, 141, 0.04),
-        rgba(255, 255, 255, 0.9)
+        rgba(33, 128, 141, 0.06),
+        rgba(255, 255, 255, 0.95)
       );
       display: flex;
       flex-direction: column;
-      gap: var(--space-4);
-      cursor: pointer;
-      transition: box-shadow 150ms ease, transform 120ms ease, border-color 150ms ease,
-        background 150ms ease;
+      gap: var(--space-6);
     }
 
-    .entry-card:hover {
-      box-shadow: var(--shadow-md);
-      transform: translateY(-1px);
-      border-color: rgba(33, 128, 141, 0.4);
-    }
-
-    .entry-main-row {
+    .entry-row {
       display: flex;
       justify-content: space-between;
+      align-items: flex-start;
       gap: var(--space-8);
+    }
+
+    .entry-activity-time {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
     }
 
     .entry-activity {
@@ -514,12 +491,22 @@
       color: var(--color-text-secondary);
     }
 
+    .entry-pill {
+      padding: var(--space-2) var(--space-8);
+      border-radius: 999px;
+      border: 1px solid rgba(33, 128, 141, 0.3);
+      font-size: var(--font-size-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
     .entry-details {
       font-size: var(--font-size-sm);
       color: var(--color-text-secondary);
     }
 
-    .entry-meta-row {
+    .entry-meta {
       display: flex;
       justify-content: space-between;
       gap: var(--space-8);
@@ -527,13 +514,16 @@
       color: var(--color-text-secondary);
     }
 
-    .pill {
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(33, 128, 141, 0.3);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
+    .entry-duration {
+      font-weight: var(--font-weight-medium);
+      color: var(--color-primary);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: var(--space-16);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-sm);
     }
 
     /* Data log modal */
@@ -688,334 +678,282 @@
       flex-direction: column;
       gap: var(--space-8);
     }
-
-    /* Responsive */
-
-    @media (min-width: 768px) {
-      .app-body {
-        max-width: 960px;
-        margin: 0 auto;
-      }
-    }
-
-    @media (min-width: 1024px) {
-      .app-body {
-        flex-direction: row;
-        align-items: flex-start;
-      }
-
-      .main-column {
-        flex: 1.3;
-      }
-
-      .side-column {
-        flex: 1;
-      }
-    }
   </style>
 </head>
 <body>
   <div class="app">
     <header class="app-header">
-      <div class="header-top-row">
-        <div class="header-title-group">
-          <div class="header-title">
-            <h1>Field Data Logger</h1>
-          </div>
-          <div class="header-subtitle">Optimized for phone entry · Portrait first</div>
-        </div>
-        <div class="header-actions">
-          <div class="badge" id="githubStatusBadge">
-            <span class="status-dot" id="githubStatusDot"></span>
-            <span id="githubStatusText">Not connected</span>
-          </div>
-          <button class="btn btn-ghost btn-sm" id="viewLogBtn">View Log</button>
-        </div>
+      <div class="app-title">
+        <h1>Field Data Logger</h1>
+        <div class="app-subtitle">Portrait · Mobile first</div>
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
-        <div class="project-pill" id="projectPill">Project: OC25-16</div>
-        <small style="font-size:11px;color:var(--color-text-secondary);">
-          Entries: <span id="entryCountHeader">0</span>
-        </small>
-      </div>
+      <button class="btn btn-ghost btn-sm" id="viewLogBtn">View Log</button>
     </header>
 
     <main class="app-body">
-      <section class="main-column" style="display:flex;flex-direction:column;gap:12px;">
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <div class="card-title">Entry Form</div>
-              <div class="card-subtitle">
-                Fill in details, submit, then scroll to confirm recent entries.
-              </div>
+      <!-- GitHub Sync Collapsible Button -->
+      <button class="github-sync-button" id="githubSyncToggle">
+        <div class="github-button-left">
+          <div class="status-indicator" id="statusIndicator"></div>
+          <div class="github-button-text">
+            <div class="github-button-label">GitHub Sync</div>
+            <div class="github-button-status" id="githubStatusText">Not connected</div>
+          </div>
+        </div>
+        <span class="chevron" id="githubChevron">›</span>
+      </button>
+
+      <!-- GitHub Panel (Collapsible) -->
+      <div class="github-panel" id="githubPanel">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="githubUsername">GitHub Username</label>
+            <input
+              id="githubUsername"
+              class="form-control"
+              type="text"
+              value="thatsrikki"
+              placeholder="your-username"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="githubRepo">Repository Name</label>
+            <input
+              id="githubRepo"
+              class="form-control"
+              type="text"
+              value="field_data_logger"
+              placeholder="field-data-logger"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="githubToken">Personal Access Token</label>
+            <input
+              id="githubToken"
+              class="form-control"
+              type="password"
+              placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+            />
+            <div class="helper-text">
+              Fine-grained token • repository access: this repo only • permissions: contents (read/write)
             </div>
-            <button class="btn btn-outline btn-sm" id="startDayBtn">Start Day</button>
+          </div>
+          <button class="btn btn-primary btn-full" id="connectGitHubBtn">
+            Connect to GitHub
+          </button>
+        </div>
+      </div>
+
+      <!-- Entry Form Card -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Entry Form</div>
+            <div class="card-subtitle">Enter data, then submit.</div>
+          </div>
+          <button class="btn btn-outline btn-sm" id="startDayBtn">Start Day</button>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="projectName">Project</label>
+              <input
+                id="projectName"
+                class="form-control"
+                type="text"
+                value="OC25-16"
+                placeholder="e.g., OC25-16"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="cityName">City</label>
+              <input
+                id="cityName"
+                class="form-control"
+                type="text"
+                placeholder="e.g., Ocala"
+              />
+            </div>
           </div>
 
-          <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="entryType">Entry Type</label>
+            <select id="entryType" class="form-control">
+              <option value="pole">Pole</option>
+              <option value="activity">Activity</option>
+            </select>
+          </div>
+
+          <!-- Pole section -->
+          <div id="poleSection">
+            <div class="form-group">
+              <label class="form-label">Pole Type</label>
+              <div class="radio-group">
+                <label class="chip">
+                  <input
+                    type="radio"
+                    name="poleType"
+                    value="primary"
+                    id="primaryPole"
+                    checked
+                  />
+                  Primary (P1, P2)
+                </label>
+                <label class="chip">
+                  <input
+                    type="radio"
+                    name="poleType"
+                    value="adjacent"
+                    id="adjacentPole"
+                  />
+                  Adjacent (P1.1, P1.2)
+                </label>
+              </div>
+            </div>
+
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label" for="projectName">Project</label>
+                <label class="form-label" for="poleId">Pole ID</label>
                 <input
-                  id="projectName"
+                  id="poleId"
                   class="form-control"
                   type="text"
-                  value="OC25-16"
-                  placeholder="e.g., OC25-16"
+                  placeholder="e.g., P1 or P1.1"
                 />
               </div>
               <div class="form-group">
-                <label class="form-label" for="cityName">City</label>
+                <label class="form-label" for="poleTime">Time</label>
                 <input
-                  id="cityName"
+                  id="poleTime"
                   class="form-control"
                   type="text"
-                  placeholder="e.g., Ocala"
+                  placeholder="e.g., 9:04:00 AM"
+                />
+              </div>
+            </div>
+
+            <div id="primaryFields">
+              <div class="form-group">
+                <label class="form-label">Attachments</label>
+                <div class="checkbox-group">
+                  <label class="chip">
+                    <input type="checkbox" id="attachTx" value="Tx" />
+                    Tx
+                  </label>
+                  <label class="chip">
+                    <input type="checkbox" id="attachDg" value="DG" />
+                    DG
+                  </label>
+                  <label class="chip">
+                    <input type="checkbox" id="attachRiser" value="Riser" />
+                    Riser
+                  </label>
+                </div>
+                <div class="helper-text">
+                  DG anchors field appears when DG is selected.
+                </div>
+              </div>
+
+              <div class="form-group" id="dgAnchorField" style="display:none;">
+                <label class="form-label" for="dgAnchors">DG Anchors</label>
+                <select id="dgAnchors" class="form-control">
+                  <option value="">None</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="adjacentFields" style="display:none;">
+              <div class="form-group">
+                <label class="form-label" for="spanDirection">Direction + Span</label>
+                <select id="spanDirection" class="form-control">
+                  <option value="">Select span...</option>
+                  <option value="s span">s span</option>
+                  <option value="nw span">nw span</option>
+                  <option value="ne span">ne span</option>
+                  <option value="e span">e span</option>
+                  <option value="sw span 1">sw span 1</option>
+                  <option value="sw span 2">sw span 2</option>
+                  <option value="w span">w span</option>
+                  <option value="se span">se span</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-full" id="addPoleBtn">
+              Add Pole Entry
+            </button>
+          </div>
+
+          <!-- Activity section -->
+          <div id="activitySection" style="display:none;">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="activityType">Activity</label>
+                <select id="activityType" class="form-control">
+                  <option value="Break">Break</option>
+                  <option value="Lunch">Lunch</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="activityTime">Time</label>
+                <input
+                  id="activityTime"
+                  class="form-control"
+                  type="text"
+                  placeholder="e.g., 10:00:00 AM"
                 />
               </div>
             </div>
 
             <div class="form-group">
-              <label class="form-label" for="entryType">Entry Type</label>
-              <select id="entryType" class="form-control">
-                <option value="pole">Pole</option>
-                <option value="activity">Activity</option>
-              </select>
+              <label class="form-label" for="activityDescription">Description</label>
+              <input
+                id="activityDescription"
+                class="form-control"
+                type="text"
+                placeholder="e.g., bathroom, lunch break"
+              />
             </div>
 
-            <!-- Pole section -->
-            <div id="poleSection">
-              <div class="form-group">
-                <label class="form-label">Pole Type</label>
-                <div class="radio-group">
-                  <label class="chip">
-                    <input
-                      type="radio"
-                      name="poleType"
-                      value="primary"
-                      id="primaryPole"
-                      checked
-                    />
-                    Primary (P1, P2)
-                  </label>
-                  <label class="chip">
-                    <input
-                      type="radio"
-                      name="poleType"
-                      value="adjacent"
-                      id="adjacentPole"
-                    />
-                    Adjacent (P1.1, P1.2)
-                  </label>
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label class="form-label" for="poleId">Pole ID</label>
-                  <input
-                    id="poleId"
-                    class="form-control"
-                    type="text"
-                    placeholder="e.g., P1 or P1.1"
-                  />
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="poleTime">Time</label>
-                  <input
-                    id="poleTime"
-                    class="form-control"
-                    type="text"
-                    placeholder="e.g., 9:04:00 AM"
-                  />
-                </div>
-              </div>
-
-              <div id="primaryFields">
-                <div class="form-group">
-                  <label class="form-label">Attachments</label>
-                  <div class="checkbox-group">
-                    <label class="chip">
-                      <input type="checkbox" id="attachTx" value="Tx" />
-                      Tx
-                    </label>
-                    <label class="chip">
-                      <input type="checkbox" id="attachDg" value="DG" />
-                      DG
-                    </label>
-                    <label class="chip">
-                      <input type="checkbox" id="attachRiser" value="Riser" />
-                      Riser
-                    </label>
-                  </div>
-                  <div class="helper-text">
-                    DG anchors field appears when DG is selected.
-                  </div>
-                </div>
-
-                <div class="form-group" id="dgAnchorField" style="display:none;">
-                  <label class="form-label" for="dgAnchors">DG Anchors</label>
-                  <select id="dgAnchors" class="form-control">
-                    <option value="">None</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                  </select>
-                </div>
-              </div>
-
-              <div id="adjacentFields" style="display:none;">
-                <div class="form-group">
-                  <label class="form-label" for="spanDirection">Direction + Span</label>
-                  <select id="spanDirection" class="form-control">
-                    <option value="">Select span...</option>
-                    <option value="s span">s span</option>
-                    <option value="nw span">nw span</option>
-                    <option value="ne span">ne span</option>
-                    <option value="e span">e span</option>
-                    <option value="sw span 1">sw span 1</option>
-                    <option value="sw span 2">sw span 2</option>
-                    <option value="w span">w span</option>
-                    <option value="se span">se span</option>
-                  </select>
-                </div>
-              </div>
-
-              <button class="btn btn-primary btn-full" id="addPoleBtn">
-                Add Pole Entry
-              </button>
-            </div>
-
-            <!-- Activity section -->
-            <div id="activitySection" style="display:none;">
-              <div class="form-row">
-                <div class="form-group">
-                  <label class="form-label" for="activityType">Activity</label>
-                  <select id="activityType" class="form-control">
-                    <option value="Break">Break</option>
-                    <option value="Lunch">Lunch</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="activityTime">Time</label>
-                  <input
-                    id="activityTime"
-                    class="form-control"
-                    type="text"
-                    placeholder="e.g., 10:00:00 AM"
-                  />
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="activityDescription">Description</label>
-                <input
-                  id="activityDescription"
-                  class="form-control"
-                  type="text"
-                  placeholder="e.g., bathroom, lunch break"
-                />
-              </div>
-
-              <button class="btn btn-primary btn-full" id="addActivityBtn">
-                Add Activity Entry
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="entries-card-header">
-            <div>
-              <div class="card-title">Recent Entries</div>
-              <div class="card-subtitle">
-                Scroll to review what you just entered. Tap a card to edit.
-              </div>
-            </div>
-            <span
-              style="font-size:11px;color:var(--color-text-secondary);white-space:nowrap;"
-            >
-              Showing last <span id="recentCount">0</span>
-            </span>
-          </div>
-          <div class="entries-list" id="entriesList"></div>
-        </div>
-      </section>
-
-      <section class="side-column" style="display:flex;flex-direction:column;gap:12px;">
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <div class="card-title">GitHub Sync</div>
-              <div class="card-subtitle">
-                Optional: connect to sync daily CSVs to GitHub.
-              </div>
-            </div>
-          </div>
-
-          <div class="github-setup">
-            <div class="github-toggle" id="githubToggle">
-              <div class="github-toggle-label">
-                <span style="font-size:14px;">⚙️</span>
-                <span>GitHub connection details</span>
-              </div>
-              <span class="chevron" id="githubChevron">›</span>
-            </div>
-
-            <div class="github-panel" id="githubPanel">
-              <div class="form-grid">
-                <div class="form-group">
-                  <label class="form-label" for="githubUsername">Username</label>
-                  <input
-                    id="githubUsername"
-                    class="form-control"
-                    type="text"
-                    value="thatsrikki"
-                    placeholder="your-username"
-                  />
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="githubRepo">Repository</label>
-                  <input
-                    id="githubRepo"
-                    class="form-control"
-                    type="text"
-                    value="field_data_logger"
-                    placeholder="repo-name"
-                  />
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="githubToken">Personal Access Token</label>
-                  <input
-                    id="githubToken"
-                    class="form-control"
-                    type="password"
-                    placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
-                  />
-                  <div class="helper-text">
-                    Fine-grained token · repository access: this repo only · permissions:
-                    contents (read/write).
-                  </div>
-                </div>
-                <button class="btn btn-primary btn-full" id="connectGitHubBtn">
-                  Connect to GitHub
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="quick-actions">
-            <button class="btn btn-outline" id="exportCsvBtn">Export CSV</button>
-            <button class="btn btn-outline" id="copyTextBtn">Copy Text</button>
-            <button class="btn btn-outline" id="exportStartNewBtn">
-              Export &amp; New
+            <button class="btn btn-primary btn-full" id="addActivityBtn">
+              Add Activity Entry
             </button>
-            <button class="btn btn-danger" id="clearAllBtn">Clear All</button>
           </div>
         </div>
-      </section>
+      </div>
+
+      <!-- Most Recent Entry -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Most Recent Entry</div>
+            <div class="card-subtitle">Last entry added</div>
+          </div>
+        </div>
+        <div id="recentEntryContainer">
+          <div class="empty-state">No entries yet. Add your first entry above.</div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Export & Manage</div>
+          </div>
+        </div>
+        <div class="quick-actions">
+          <button class="btn btn-outline" id="exportCsvBtn">Export CSV</button>
+          <button class="btn btn-outline" id="copyTextBtn">Copy Text</button>
+          <button class="btn btn-outline" id="exportStartNewBtn">Export & New</button>
+          <button class="btn btn-danger" id="clearAllBtn">Clear All</button>
+        </div>
+      </div>
     </main>
   </div>
 
@@ -1026,14 +964,14 @@
         <div class="modal-title-group">
           <div class="modal-title">Field Data Log</div>
           <div class="modal-subtitle">
-            Full view of all entries. Edit or delete as needed.
+            Full view of all entries. Tap Edit/Delete as needed.
           </div>
         </div>
         <button class="btn btn-icon btn-outline" id="closeLogModalBtn">✕</button>
       </div>
       <div class="modal-body">
         <div
-          style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"
+          style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"
         >
           <small style="font-size:11px;color:var(--color-text-secondary);">
             Total entries: <span id="entryCountModal">0</span>
@@ -1099,62 +1037,123 @@
       setTimeout(() => toast.classList.remove("show"), 2200);
     }
 
-    function updateProjectPill() {
-      const projectName = field("projectName").value || "OC25-16";
-      field("projectPill").textContent = "Project: " + projectName;
+    // Parse time string (e.g., "9:04:00 AM") to minutes since midnight
+    function timeToMinutes(timeStr) {
+      if (!timeStr) return null;
+      const match = timeStr.match(/(\d+):(\d+):(\d+)\s*(AM|PM)?/i);
+      if (!match) return null;
+      
+      let hours = parseInt(match[1], 10);
+      const minutes = parseInt(match[2], 10);
+      const seconds = parseInt(match[3], 10);
+      const period = match[4] ? match[4].toUpperCase() : '';
+
+      if (period === 'PM' && hours !== 12) hours += 12;
+      if (period === 'AM' && hours === 12) hours = 0;
+
+      return hours * 60 + minutes + seconds / 60;
     }
 
-    function updateEntryCounts() {
-      const count = dataLog.length;
-      field("entryCountHeader").textContent = count;
-      field("entryCountModal").textContent = count;
-      field("recentCount").textContent = Math.min(count, 10);
+    // Convert minutes to HH:MM:SS format
+    function minutesToDuration(minutes) {
+      if (!minutes || minutes < 0) return '';
+      
+      const hours = Math.floor(minutes / 60);
+      const mins = Math.floor(minutes % 60);
+      const secs = Math.round((minutes % 1) * 60);
+
+      return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     }
 
-    function renderRecentEntries() {
-      const container = field("entriesList");
-      container.innerHTML = "";
-      const recent = dataLog.slice(-10).reverse();
+    // Calculate durations for all entries
+    function calculateDurations() {
+      for (let i = 0; i < dataLog.length; i++) {
+        if (i < dataLog.length - 1) {
+          const currentTime = timeToMinutes(dataLog[i].timeStamps);
+          const nextTime = timeToMinutes(dataLog[i + 1].timeStamps);
+          
+          if (currentTime !== null && nextTime !== null) {
+            let duration = nextTime - currentTime;
+            // Handle case where next day (e.g., 11:00 PM to 1:00 AM next day)
+            if (duration < 0) {
+              duration += 24 * 60;
+            }
+            dataLog[i].duration = minutesToDuration(duration);
+          }
+        } else {
+          // Last entry has no duration (no next entry yet)
+          dataLog[i].duration = '';
+        }
+      }
+    }
 
-      recent.forEach((row, idx) => {
-        const div = document.createElement("div");
-        div.className = "entry-card";
-        const globalIndex = dataLog.length - 1 - idx;
-        div.dataset.index = globalIndex;
+    function updateGitHubStatus(connected) {
+      const indicator = field("statusIndicator");
+      const statusText = field("githubStatusText");
+      if (connected && githubConfig) {
+        indicator.classList.add("connected");
+        statusText.textContent = "Connected to GitHub";
+      } else {
+        indicator.classList.remove("connected");
+        statusText.textContent = "Not connected";
+      }
+    }
 
-        const activity = row.activity || "";
-        const time = row.timeStamps || "";
-        const work = row.workDetails || "";
-        const proj = row.project || "";
-        const attachments = row.poleAttachments || "";
-        const dg = row.dgAnchors || "";
+    function renderRecentEntry() {
+      const container = field("recentEntryContainer");
+      if (dataLog.length === 0) {
+        container.innerHTML =
+          '<div class="empty-state">No entries yet. Add your first entry above.</div>';
+        return;
+      }
 
-        div.innerHTML = `
-          <div class="entry-main-row">
-            <div>
-              <div class="entry-activity">${escapeHtml(activity)}</div>
-              <div class="entry-time">${escapeHtml(time)}</div>
-            </div>
-            <div class="pill">${escapeHtml(proj || "OC25-16")}</div>
+      const lastEntry = dataLog[dataLog.length - 1];
+      const div = document.createElement("div");
+      div.className = "recent-entry-card";
+
+      const activity = lastEntry.activity || "";
+      const time = lastEntry.timeStamps || "";
+      const work = lastEntry.workDetails || "";
+      const proj = lastEntry.project || "";
+      const attachments = lastEntry.poleAttachments || "";
+      const dg = lastEntry.dgAnchors || "";
+      const duration = lastEntry.duration || "";
+
+      div.innerHTML = `
+        <div class="entry-row">
+          <div class="entry-activity-time">
+            <div class="entry-activity">${escapeHtml(activity)}</div>
+            <div class="entry-time">${escapeHtml(time)}</div>
           </div>
-          <div class="entry-details">
-            ${escapeHtml(work || "")}
-          </div>
-          <div class="entry-meta-row">
+          <div class="entry-pill">${escapeHtml(proj || "OC25-16")}</div>
+        </div>
+        <div class="entry-details">
+          ${escapeHtml(work || "")}
+        </div>
+        ${
+          attachments || dg
+            ? `<div class="entry-meta">
             <div>${escapeHtml(attachments)}</div>
             <div>${dg ? "DG: " + escapeHtml(dg) : ""}</div>
-          </div>
-        `;
-        div.addEventListener("click", () => openEditModal(globalIndex));
-        container.appendChild(div);
-      });
+          </div>`
+            : ""
+        }
+        ${
+          duration
+            ? `<div style="font-size:var(--font-size-xs);color:var(--color-text-secondary);border-top:1px solid rgba(94,82,64,0.12);padding-top:var(--space-6);margin-top:var(--space-6);">Duration: <span class="entry-duration">${escapeHtml(duration)}</span></div>`
+            : ""
+        }
+      `;
 
-      updateEntryCounts();
+      container.innerHTML = "";
+      container.appendChild(div);
     }
 
     function renderLogTable() {
       const body = field("logTableBody");
       body.innerHTML = "";
+      field("entryCountModal").textContent = dataLog.length;
+
       dataLog.forEach((row, index) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
@@ -1188,8 +1187,6 @@
           deleteEntry(index);
         });
       });
-
-      updateEntryCounts();
     }
 
     function escapeHtml(text) {
@@ -1205,7 +1202,6 @@
 
     function addPoleEntry() {
       const projectName = field("projectName").value || "OC25-16";
-      const cityName = field("cityName").value.trim();
       const poleId = field("poleId").value.trim();
       const timeStamps = field("poleTime").value.trim();
       const primary = field("primaryPole").checked;
@@ -1250,8 +1246,8 @@
       field("spanDirection").value = "";
       updateDgAnchorVisibility();
 
-      updateProjectPill();
-      renderRecentEntries();
+      calculateDurations();
+      renderRecentEntry();
       renderLogTable();
       autoSaveToGitHub();
       showToast("✓ Pole entry added");
@@ -1281,8 +1277,8 @@
       field("activityDescription").value = "";
       field("activityTime").value = "";
 
-      updateProjectPill();
-      renderRecentEntries();
+      calculateDurations();
+      renderRecentEntry();
       renderLogTable();
       autoSaveToGitHub();
       showToast("✓ Activity entry added");
@@ -1298,7 +1294,6 @@
       }
 
       const now = new Date();
-
       const timeStr = now.toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
@@ -1346,8 +1341,8 @@
         project: projectName,
       });
 
-      updateProjectPill();
-      renderRecentEntries();
+      calculateDurations();
+      renderRecentEntry();
       renderLogTable();
       autoSaveToGitHub();
       showToast("Day started · 3 entries added");
@@ -1411,7 +1406,8 @@
       row.project = field("edit_project").value;
 
       closeEditModal();
-      renderRecentEntries();
+      calculateDurations();
+      renderRecentEntry();
       renderLogTable();
       autoSaveToGitHub();
       showToast("✓ Entry updated");
@@ -1420,7 +1416,8 @@
     function deleteEntry(index) {
       if (!confirm("Delete this entry?")) return;
       dataLog.splice(index, 1);
-      renderRecentEntries();
+      calculateDurations();
+      renderRecentEntry();
       renderLogTable();
       autoSaveToGitHub();
       showToast("Entry deleted");
@@ -1429,7 +1426,7 @@
     function clearAll() {
       if (!confirm("Clear all entries? This cannot be undone.")) return;
       dataLog.length = 0;
-      renderRecentEntries();
+      renderRecentEntry();
       renderLogTable();
       showToast("All entries cleared");
     }
@@ -1526,7 +1523,7 @@
       setTimeout(() => {
         if (!confirm("Start a new session and clear current entries?")) return;
         dataLog.length = 0;
-        renderRecentEntries();
+        renderRecentEntry();
         renderLogTable();
         showToast("New session started");
       }, 400);
@@ -1577,19 +1574,7 @@
       }
       githubConfig = { username, repo, token };
       updateGitHubStatus(true);
-      showToast("GitHub connected (client-side only)");
-    }
-
-    function updateGitHubStatus(connected) {
-      const dot = field("githubStatusDot");
-      const text = field("githubStatusText");
-      if (connected && githubConfig) {
-        dot.classList.add("connected");
-        text.textContent = "Connected";
-      } else {
-        dot.classList.remove("connected");
-        text.textContent = "Not connected";
-      }
+      showToast("✓ Connected to GitHub");
     }
 
     async function autoSaveToGitHub() {
@@ -1621,7 +1606,7 @@
           }
         );
         if (res.ok) {
-          showToast("Saved to GitHub");
+          // Silent save
         } else {
           console.warn("GitHub save failed");
         }
@@ -1634,15 +1619,14 @@
       updateEntryTypeVisibility();
       updatePoleTypeVisibility();
       updateDgAnchorVisibility();
-      renderRecentEntries();
+      renderRecentEntry();
       renderLogTable();
 
-      field("projectName").addEventListener("input", updateProjectPill);
       field("entryType").addEventListener("change", updateEntryTypeVisibility);
       field("primaryPole").addEventListener("change", updatePoleTypeVisibility);
       field("adjacentPole").addEventListener("change", updatePoleTypeVisibility);
       field("attachDg").addEventListener("change", updateDgAnchorVisibility);
-      field("githubToggle").addEventListener("click", toggleGitHubPanel);
+      field("githubSyncToggle").addEventListener("click", toggleGitHubPanel);
       field("connectGitHubBtn").addEventListener("click", connectGitHub);
 
       field("addPoleBtn").addEventListener("click", addPoleEntry);
@@ -1664,3 +1648,20 @@
   </script>
 </body>
 </html>
+```
+
+**Key Changes:**
+
+✅ **Auto-Calculate Duration** - Each entry's duration = time from that entry to the next entry
+✅ **Smart Time Parsing** - Parses "HH:MM:SS AM/PM" format
+✅ **Updates on Every Change** - Recalculates whenever you add/edit/delete entries
+✅ **Last Entry = Empty Duration** - No next entry means no duration
+✅ **Handles Day Boundaries** - If time goes from 11:00 PM to 1:00 AM, calculates correctly
+✅ **Shows in Recent Entry** - Duration displays prominently in the most recent entry card
+✅ **Exports to CSV** - Duration column includes calculated values
+
+Now when you add entries:
+- **Entry 1**: 9:00 AM (Traveling)
+- **Entry 2**: 11:00 AM (Arrived) → Duration auto-fills as 2:00:00
+- **Entry 3**: 11:15 AM (Setup) → Duration auto-fills as 0:15:00
+- **Entry 4**: 11:30 AM (P1) → Duration shows 0:00:00 (no next entry yet, will calculate when you add the next one)
