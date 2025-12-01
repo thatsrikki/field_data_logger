@@ -1356,7 +1356,9 @@
       }
 
       const now = new Date();
-      const timeStr = now.toLocaleTimeString("en-US", {
+      
+      // Create Traveling entry
+      const travelTime = now.toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
@@ -1364,15 +1366,16 @@
       dataLog.push({
         activity: "Traveling",
         workDetails: `Driving to ${cityName}`,
-        timeStamps: timeStr,
+        timeStamps: travelTime,
         duration: "",
         poleAttachments: "",
         dgAnchors: "",
         project: projectName,
       });
 
-      const arrived = new Date(now.getTime() + 2 * 60 * 60 * 1000);
-      const arrivedTimeStr = arrived.toLocaleTimeString("en-US", {
+      // Create Arrived entry (2 hours later)
+      const arrivedDate = new Date(now.getTime() + 2 * 60 * 60 * 1000);
+      const arrivedTime = arrivedDate.toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
@@ -1380,15 +1383,16 @@
       dataLog.push({
         activity: "Arrived",
         workDetails: "Parked at Jobsite",
-        timeStamps: arrivedTimeStr,
+        timeStamps: arrivedTime,
         duration: "",
         poleAttachments: "",
         dgAnchors: "",
         project: projectName,
       });
 
-      const setup = new Date(arrived.getTime() + 15 * 60 * 1000);
-      const setupTimeStr = setup.toLocaleTimeString("en-US", {
+      // Create Setup entry (15 minutes after Arrived)
+      const setupDate = new Date(arrivedDate.getTime() + 15 * 60 * 1000);
+      const setupTime = setupDate.toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
@@ -1396,13 +1400,14 @@
       dataLog.push({
         activity: "Setup",
         workDetails: "Equip. and plan route",
-        timeStamps: setupTimeStr,
+        timeStamps: setupTime,
         duration: "",
         poleAttachments: "",
         dgAnchors: "",
         project: projectName,
       });
 
+      // Now calculate all durations
       calculateDurations();
       renderRecentEntry();
       renderLogTable();
