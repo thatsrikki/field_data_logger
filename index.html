@@ -448,9 +448,15 @@
       font-size: 16px;
     }
 
-    /* Recent Entry Card */
+    /* Entry Cards */
 
-    .recent-entry-card {
+    .entries-container {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-8);
+    }
+
+    .entry-card {
       border-radius: var(--radius-md);
       border: 1px solid rgba(33, 128, 141, 0.2);
       padding: var(--space-10);
@@ -462,6 +468,14 @@
       display: flex;
       flex-direction: column;
       gap: var(--space-4);
+      cursor: pointer;
+      transition: all 150ms ease;
+    }
+
+    .entry-card:hover {
+      border-color: var(--color-primary);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
     }
 
     .entry-row {
@@ -986,15 +1000,15 @@
           </div>
         </div>
 
-        <!-- Most Recent Entry -->
+        <!-- Recent Entries (Last 3) -->
         <div class="card">
           <div class="card-header">
             <div>
-              <div class="card-title">Most Recent Entry</div>
-              <div class="card-subtitle">Last entry added</div>
+              <div class="card-title">Recent Entries</div>
+              <div class="card-subtitle">Last 3 entries. Click to edit.</div>
             </div>
           </div>
-          <div id="recentEntryContainer">
+          <div id="recentEntriesContainer">
             <div class="empty-state">No entries yet. Add your first entry above.</div>
           </div>
         </div>
@@ -1161,54 +1175,66 @@
       }
     }
 
-    function renderRecentEntry() {
-      const container = field("recentEntryContainer");
+    function renderRecentEntries() {
+      const container = field("recentEntriesContainer");
       if (dataLog.length === 0) {
         container.innerHTML =
           '<div class="empty-state">No entries yet. Add your first entry above.</div>';
         return;
       }
 
-      const lastEntry = dataLog[dataLog.length - 1];
-      const div = document.createElement("div");
-      div.className = "recent-entry-card";
+      // Get last 3 entries
+      const lastThree = dataLog.slice(-3).reverse();
+      
+      container.innerHTML = '';
+      const entriesDiv = document.createElement('div');
+      entriesDiv.className = 'entries-container';
 
-      const activity = lastEntry.activity || "";
-      const time = lastEntry.timeStamps || "";
-      const work = lastEntry.workDetails || "";
-      const proj = lastEntry.project || "";
-      const attachments = lastEntry.poleAttachments || "";
-      const dg = lastEntry.dgAnchors || "";
-      const duration = lastEntry.duration || "";
+      lastThree.forEach((entry, displayIndex) => {
+        const actualIndex = dataLog.length - 3 + displayIndex;
+        const div = document.createElement("div");
+        div.className = "entry-card";
+        div.style.cursor = "pointer";
 
-      div.innerHTML = `
-        <div class="entry-row">
-          <div class="entry-activity-time">
-            <div class="entry-activity">${escapeHtml(activity)}</div>
-            <div class="entry-time">${escapeHtml(time)}</div>
+        const activity = entry.activity || "";
+        const time = entry.timeStamps || "";
+        const work = entry.workDetails || "";
+        const proj = entry.project || "";
+        const attachments = entry.poleAttachments || "";
+        const dg = entry.dgAnchors || "";
+        const duration = entry.duration || "";
+
+        div.innerHTML = `
+          <div class="entry-row">
+            <div class="entry-activity-time">
+              <div class="entry-activity">${escapeHtml(activity)}</div>
+              <div class="entry-time">${escapeHtml(time)}</div>
+            </div>
+            <div class="entry-pill">${escapeHtml(proj || "OC25-16")}</div>
           </div>
-          <div class="entry-pill">${escapeHtml(proj || "OC25-16")}</div>
-        </div>
-        <div class="entry-details">
-          ${escapeHtml(work || "")}
-        </div>
-        ${
-          attachments || dg
-            ? `<div class="entry-meta">
-            <div>${escapeHtml(attachments)}</div>
-            <div>${dg ? "DG: " + escapeHtml(dg) : ""}</div>
-          </div>`
-            : ""
-        }
-        ${
-          duration
-            ? `<div style="font-size:var(--font-size-xs);color:var(--color-text-secondary);border-top:1px solid rgba(94,82,64,0.12);padding-top:var(--space-6);margin-top:var(--space-6);">Duration: <span class="entry-duration">${escapeHtml(duration)}</span></div>`
-            : ""
-        }
-      `;
+          <div class="entry-details">
+            ${escapeHtml(work || "")}
+          </div>
+          ${
+            attachments || dg
+              ? `<div class="entry-meta">
+              <div>${escapeHtml(attachments)}</div>
+              <div>${dg ? "DG: " + escapeHtml(dg) : ""}</div>
+            </div>`
+              : ""
+          }
+          ${
+            duration
+              ? `<div style="font-size:var(--font-size-xs);color:var(--color-text-secondary);border-top:1px solid rgba(94,82,64,0.12);padding-top:var(--space-6);margin-top:var(--space-6);">Duration: <span class="entry-duration">${escapeHtml(duration)}</span></div>`
+              : ""
+          }
+        `;
 
-      container.innerHTML = "";
-      container.appendChild(div);
+        div.addEventListener('click', () => openEditModal(actualIndex));
+        entriesDiv.appendChild(div);
+      });
+
+      container.appendChild(entriesDiv);
     }
 
     function renderLogTable() {
@@ -1309,7 +1335,7 @@
       updateDgAnchorVisibility();
 
       calculateDurations();
-      renderRecentEntry();
+      renderRecentEntries();
       renderLogTable();
       autoSaveToGitHub();
       showToast("✓ Pole entry added");
@@ -1340,7 +1366,7 @@
       field("activityTime").value = "";
 
       calculateDurations();
-      renderRecentEntry();
+      renderRecentEntries();
       renderLogTable();
       autoSaveToGitHub();
       showToast("✓ Activity entry added");
@@ -1409,7 +1435,7 @@
 
       // Now calculate all durations
       calculateDurations();
-      renderRecentEntry();
+      renderRecentEntries();
       renderLogTable();
       autoSaveToGitHub();
       showToast("Day started · 3 entries added");
@@ -1474,7 +1500,7 @@
 
       closeEditModal();
       calculateDurations();
-      renderRecentEntry();
+      renderRecentEntries();
       renderLogTable();
       autoSaveToGitHub();
       showToast("✓ Entry updated");
@@ -1484,7 +1510,7 @@
       if (!confirm("Delete this entry?")) return;
       dataLog.splice(index, 1);
       calculateDurations();
-      renderRecentEntry();
+      renderRecentEntries();
       renderLogTable();
       autoSaveToGitHub();
       showToast("Entry deleted");
@@ -1493,7 +1519,7 @@
     function clearAll() {
       if (!confirm("Clear all entries? This cannot be undone.")) return;
       dataLog.length = 0;
-      renderRecentEntry();
+      renderRecentEntries();
       renderLogTable();
       showToast("All entries cleared");
     }
@@ -1590,7 +1616,7 @@
       setTimeout(() => {
         if (!confirm("Start a new session and clear current entries?")) return;
         dataLog.length = 0;
-        renderRecentEntry();
+        renderRecentEntries();
         renderLogTable();
         showToast("New session started");
       }, 400);
@@ -1686,7 +1712,7 @@
       updateEntryTypeVisibility();
       updatePoleTypeVisibility();
       updateDgAnchorVisibility();
-      renderRecentEntry();
+      renderRecentEntries();
       renderLogTable();
 
       field("entryType").addEventListener("change", updateEntryTypeVisibility);
