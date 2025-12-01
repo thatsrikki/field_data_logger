@@ -156,12 +156,6 @@
       color: var(--color-text-secondary);
     }
 
-    .app-header-actions {
-      display: flex;
-      gap: var(--space-8);
-      align-items: center;
-    }
-
     .app-body {
       flex: 1;
       padding: var(--space-12) var(--space-12) var(--space-16);
@@ -177,14 +171,14 @@
       border-radius: var(--radius-lg);
       border: 1px solid var(--color-card-border);
       box-shadow: var(--shadow-sm);
-      padding: var(--space-16);
+      padding: var(--space-12);
     }
 
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: var(--space-10);
+      margin-bottom: var(--space-8);
     }
 
     .card-title {
@@ -236,6 +230,7 @@
       border-radius: 999px;
       background: var(--color-gray-500);
       transition: background-color 200ms ease;
+      flex-shrink: 0;
     }
 
     .status-indicator.connected {
@@ -263,6 +258,7 @@
       transition: transform 150ms ease;
       font-size: 14px;
       color: var(--color-text-secondary);
+      flex-shrink: 0;
     }
 
     .chevron.open {
@@ -289,7 +285,7 @@
     .form-grid {
       display: flex;
       flex-direction: column;
-      gap: var(--space-12);
+      gap: var(--space-8);
     }
 
     .form-row {
@@ -457,7 +453,7 @@
     .recent-entry-card {
       border-radius: var(--radius-md);
       border: 1px solid rgba(33, 128, 141, 0.2);
-      padding: var(--space-12) var(--space-12);
+      padding: var(--space-10);
       background: linear-gradient(
         135deg,
         rgba(33, 128, 141, 0.06),
@@ -465,7 +461,7 @@
       );
       display: flex;
       flex-direction: column;
-      gap: var(--space-6);
+      gap: var(--space-4);
     }
 
     .entry-row {
@@ -521,7 +517,7 @@
 
     .empty-state {
       text-align: center;
-      padding: var(--space-16);
+      padding: var(--space-12);
       color: var(--color-text-secondary);
       font-size: var(--font-size-sm);
     }
@@ -663,7 +659,6 @@
       display: flex;
       flex-wrap: wrap;
       gap: var(--space-8);
-      margin-top: var(--space-8);
     }
 
     .quick-actions .btn {
@@ -671,12 +666,75 @@
       min-width: 48%;
     }
 
-    /* Edit modal */
-
     .edit-form-grid {
       display: flex;
       flex-direction: column;
       gap: var(--space-8);
+    }
+
+    /* Desktop layout - side by side */
+    @media (min-width: 1200px) {
+      .app-body {
+        flex-direction: row;
+        gap: var(--space-16);
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+        padding: var(--space-12) var(--space-16) var(--space-16);
+      }
+
+      .main-column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-12);
+        min-width: 0;
+      }
+
+      .side-column {
+        width: 320px;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-12);
+        max-height: calc(100vh - 180px);
+        overflow-y: auto;
+      }
+
+      .card {
+        padding: var(--space-12);
+      }
+
+      .form-grid {
+        gap: var(--space-6);
+      }
+
+      .form-group {
+        gap: var(--space-2);
+      }
+
+      .form-control,
+      select {
+        padding: var(--space-6) var(--space-8);
+        font-size: var(--font-size-sm);
+      }
+
+      .form-label {
+        font-size: var(--font-size-xs);
+      }
+
+      .btn {
+        padding: var(--space-6) var(--space-12);
+        font-size: var(--font-size-sm);
+        min-height: 36px;
+      }
+
+      .card-title {
+        font-size: var(--font-size-xs);
+      }
+
+      .card-subtitle {
+        font-size: var(--font-size-xs);
+      }
     }
   </style>
 </head>
@@ -691,267 +749,283 @@
     </header>
 
     <main class="app-body">
-      <!-- GitHub Sync Collapsible Button -->
-      <button class="github-sync-button" id="githubSyncToggle">
-        <div class="github-button-left">
-          <div class="status-indicator" id="statusIndicator"></div>
-          <div class="github-button-text">
-            <div class="github-button-label">GitHub Sync</div>
-            <div class="github-button-status" id="githubStatusText">Not connected</div>
-          </div>
-        </div>
-        <span class="chevron" id="githubChevron">›</span>
-      </button>
-
-      <!-- GitHub Panel (Collapsible) -->
-      <div class="github-panel" id="githubPanel">
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label" for="githubUsername">GitHub Username</label>
-            <input
-              id="githubUsername"
-              class="form-control"
-              type="text"
-              value="thatsrikki"
-              placeholder="your-username"
-            />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="githubRepo">Repository Name</label>
-            <input
-              id="githubRepo"
-              class="form-control"
-              type="text"
-              value="field_data_logger"
-              placeholder="field-data-logger"
-            />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="githubToken">Personal Access Token</label>
-            <input
-              id="githubToken"
-              class="form-control"
-              type="password"
-              placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
-            />
-            <div class="helper-text">
-              Fine-grained token • repository access: this repo only • permissions: contents (read/write)
+      <div class="main-column">
+        <!-- GitHub Sync Collapsible Button -->
+        <button class="github-sync-button" id="githubSyncToggle">
+          <div class="github-button-left">
+            <div class="status-indicator" id="statusIndicator"></div>
+            <div class="github-button-text">
+              <div class="github-button-label">GitHub Sync</div>
+              <div class="github-button-status" id="githubStatusText">Not connected</div>
             </div>
           </div>
-          <button class="btn btn-primary btn-full" id="connectGitHubBtn">
-            Connect to GitHub
-          </button>
-        </div>
-      </div>
+          <span class="chevron" id="githubChevron">›</span>
+        </button>
 
-      <!-- Entry Form Card -->
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Entry Form</div>
-            <div class="card-subtitle">Enter data, then submit.</div>
-          </div>
-          <button class="btn btn-outline btn-sm" id="startDayBtn">Start Day</button>
-        </div>
-
-        <div class="form-grid">
-          <div class="form-row">
+        <!-- GitHub Panel (Collapsible) -->
+        <div class="github-panel" id="githubPanel">
+          <div class="form-grid">
             <div class="form-group">
-              <label class="form-label" for="projectName">Project</label>
+              <label class="form-label" for="githubUsername">GitHub Username</label>
               <input
-                id="projectName"
+                id="githubUsername"
                 class="form-control"
                 type="text"
-                value="OC25-16"
-                placeholder="e.g., OC25-16"
+                value="thatsrikki"
+                placeholder="your-username"
               />
             </div>
             <div class="form-group">
-              <label class="form-label" for="cityName">City</label>
+              <label class="form-label" for="githubRepo">Repository Name</label>
               <input
-                id="cityName"
+                id="githubRepo"
                 class="form-control"
                 type="text"
-                placeholder="e.g., Ocala"
+                value="field_data_logger"
+                placeholder="field-data-logger"
               />
             </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="entryType">Entry Type</label>
-            <select id="entryType" class="form-control">
-              <option value="pole">Pole</option>
-              <option value="activity">Activity</option>
-            </select>
-          </div>
-
-          <!-- Pole section -->
-          <div id="poleSection">
             <div class="form-group">
-              <label class="form-label">Pole Type</label>
-              <div class="radio-group">
-                <label class="chip">
-                  <input
-                    type="radio"
-                    name="poleType"
-                    value="primary"
-                    id="primaryPole"
-                    checked
-                  />
-                  Primary (P1, P2)
-                </label>
-                <label class="chip">
-                  <input
-                    type="radio"
-                    name="poleType"
-                    value="adjacent"
-                    id="adjacentPole"
-                  />
-                  Adjacent (P1.1, P1.2)
-                </label>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="poleId">Pole ID</label>
-                <input
-                  id="poleId"
-                  class="form-control"
-                  type="text"
-                  placeholder="e.g., P1 or P1.1"
-                />
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="poleTime">Time</label>
-                <input
-                  id="poleTime"
-                  class="form-control"
-                  type="text"
-                  placeholder="e.g., 9:04:00 AM"
-                />
-              </div>
-            </div>
-
-            <div id="primaryFields">
-              <div class="form-group">
-                <label class="form-label">Attachments</label>
-                <div class="checkbox-group">
-                  <label class="chip">
-                    <input type="checkbox" id="attachTx" value="Tx" />
-                    Tx
-                  </label>
-                  <label class="chip">
-                    <input type="checkbox" id="attachDg" value="DG" />
-                    DG
-                  </label>
-                  <label class="chip">
-                    <input type="checkbox" id="attachRiser" value="Riser" />
-                    Riser
-                  </label>
-                </div>
-                <div class="helper-text">
-                  DG anchors field appears when DG is selected.
-                </div>
-              </div>
-
-              <div class="form-group" id="dgAnchorField" style="display:none;">
-                <label class="form-label" for="dgAnchors">DG Anchors</label>
-                <select id="dgAnchors" class="form-control">
-                  <option value="">None</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                </select>
-              </div>
-            </div>
-
-            <div id="adjacentFields" style="display:none;">
-              <div class="form-group">
-                <label class="form-label" for="spanDirection">Direction + Span</label>
-                <select id="spanDirection" class="form-control">
-                  <option value="">Select span...</option>
-                  <option value="s span">s span</option>
-                  <option value="nw span">nw span</option>
-                  <option value="ne span">ne span</option>
-                  <option value="e span">e span</option>
-                  <option value="sw span 1">sw span 1</option>
-                  <option value="sw span 2">sw span 2</option>
-                  <option value="w span">w span</option>
-                  <option value="se span">se span</option>
-                </select>
-              </div>
-            </div>
-
-            <button class="btn btn-primary btn-full" id="addPoleBtn">
-              Add Pole Entry
-            </button>
-          </div>
-
-          <!-- Activity section -->
-          <div id="activitySection" style="display:none;">
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="activityType">Activity</label>
-                <select id="activityType" class="form-control">
-                  <option value="Break">Break</option>
-                  <option value="Lunch">Lunch</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="activityTime">Time</label>
-                <input
-                  id="activityTime"
-                  class="form-control"
-                  type="text"
-                  placeholder="e.g., 10:00:00 AM"
-                />
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label" for="activityDescription">Description</label>
+              <label class="form-label" for="githubToken">Personal Access Token</label>
               <input
-                id="activityDescription"
+                id="githubToken"
                 class="form-control"
-                type="text"
-                placeholder="e.g., bathroom, lunch break"
+                type="password"
+                placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
               />
+              <div class="helper-text">
+                Fine-grained token • repository access: this repo only • permissions: contents (read/write)
+              </div>
             </div>
-
-            <button class="btn btn-primary btn-full" id="addActivityBtn">
-              Add Activity Entry
+            <button class="btn btn-primary btn-full" id="connectGitHubBtn">
+              Connect to GitHub
             </button>
           </div>
         </div>
-      </div>
 
-      <!-- Most Recent Entry -->
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Most Recent Entry</div>
-            <div class="card-subtitle">Last entry added</div>
+        <!-- Entry Form Card -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Entry Form</div>
+              <div class="card-subtitle">Enter data, then submit.</div>
+            </div>
+            <button class="btn btn-outline btn-sm" id="startDayBtn">Start Day</button>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="projectName">Project</label>
+                <input
+                  id="projectName"
+                  class="form-control"
+                  type="text"
+                  value="OC25-16"
+                  placeholder="e.g., OC25-16"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cityName">City</label>
+                <input
+                  id="cityName"
+                  class="form-control"
+                  type="text"
+                  placeholder="e.g., Ocala"
+                />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="entryType">Entry Type</label>
+              <select id="entryType" class="form-control">
+                <option value="pole">Pole</option>
+                <option value="activity">Activity</option>
+              </select>
+            </div>
+
+            <!-- Pole section -->
+            <div id="poleSection">
+              <div class="form-group">
+                <label class="form-label">Pole Type</label>
+                <div class="radio-group">
+                  <label class="chip">
+                    <input
+                      type="radio"
+                      name="poleType"
+                      value="primary"
+                      id="primaryPole"
+                      checked
+                    />
+                    Primary (P1, P2)
+                  </label>
+                  <label class="chip">
+                    <input
+                      type="radio"
+                      name="poleType"
+                      value="adjacent"
+                      id="adjacentPole"
+                    />
+                    Adjacent (P1.1, P1.2)
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="poleId">Pole ID</label>
+                  <input
+                    id="poleId"
+                    class="form-control"
+                    type="text"
+                    placeholder="e.g., P1 or P1.1"
+                  />
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="poleTime">Time</label>
+                  <input
+                    id="poleTime"
+                    class="form-control"
+                    type="text"
+                    placeholder="e.g., 9:04:00 AM"
+                  />
+                </div>
+              </div>
+
+              <div id="primaryFields">
+                <div class="form-group">
+                  <label class="form-label">Attachments</label>
+                  <div class="checkbox-group">
+                    <label class="chip">
+                      <input type="checkbox" id="attachTx" value="Tx" />
+                      Tx
+                    </label>
+                    <label class="chip">
+                      <input type="checkbox" id="attachDg" value="DG" />
+                      DG
+                    </label>
+                    <label class="chip">
+                      <input type="checkbox" id="attachRiser" value="Riser" />
+                      Riser
+                    </label>
+                  </div>
+                  <div class="helper-text">
+                    DG anchors field appears when DG is selected.
+                  </div>
+                </div>
+
+                <div class="form-group" id="dgAnchorField" style="display:none;">
+                  <label class="form-label" for="dgAnchors">DG Anchors</label>
+                  <select id="dgAnchors" class="form-control">
+                    <option value="">None</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                  </select>
+                </div>
+              </div>
+
+              <div id="adjacentFields" style="display:none;">
+                <div class="form-group">
+                  <label class="form-label" for="spanDirection">Direction + Span</label>
+                  <select id="spanDirection" class="form-control">
+                    <option value="">Select span...</option>
+                    <option value="s span">s span</option>
+                    <option value="nw span">nw span</option>
+                    <option value="ne span">ne span</option>
+                    <option value="e span">e span</option>
+                    <option value="sw span 1">sw span 1</option>
+                    <option value="sw span 2">sw span 2</option>
+                    <option value="w span">w span</option>
+                    <option value="se span">se span</option>
+                  </select>
+                </div>
+              </div>
+
+              <button class="btn btn-primary btn-full" id="addPoleBtn">
+                Add Pole Entry
+              </button>
+            </div>
+
+            <!-- Activity section -->
+            <div id="activitySection" style="display:none;">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="activityType">Activity</label>
+                  <select id="activityType" class="form-control">
+                    <option value="Break">Break</option>
+                    <option value="Lunch">Lunch</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="activityTime">Time</label>
+                  <input
+                    id="activityTime"
+                    class="form-control"
+                    type="text"
+                    placeholder="e.g., 10:00:00 AM"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="activityDescription">Description</label>
+                <input
+                  id="activityDescription"
+                  class="form-control"
+                  type="text"
+                  placeholder="e.g., bathroom, lunch break"
+                />
+              </div>
+
+              <button class="btn btn-primary btn-full" id="addActivityBtn">
+                Add Activity Entry
+              </button>
+            </div>
           </div>
         </div>
-        <div id="recentEntryContainer">
-          <div class="empty-state">No entries yet. Add your first entry above.</div>
+
+        <!-- Most Recent Entry -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Most Recent Entry</div>
+              <div class="card-subtitle">Last entry added</div>
+            </div>
+          </div>
+          <div id="recentEntryContainer">
+            <div class="empty-state">No entries yet. Add your first entry above.</div>
+          </div>
         </div>
       </div>
 
-      <!-- Quick Actions -->
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Export & Manage</div>
+      <div class="side-column">
+        <!-- GitHub info for desktop -->
+        <div class="card" style="display:none;" id="githubInfoCard">
+          <div class="card-header">
+            <div>
+              <div class="card-title">GitHub Sync</div>
+            </div>
+          </div>
+          <div id="githubConnectionStatus" style="font-size:var(--font-size-xs);color:var(--color-text-secondary);">
+            Optional: connect to sync daily CSVs to GitHub.
           </div>
         </div>
-        <div class="quick-actions">
-          <button class="btn btn-outline" id="exportCsvBtn">Export CSV</button>
-          <button class="btn btn-outline" id="copyTextBtn">Copy Text</button>
-          <button class="btn btn-outline" id="exportStartNewBtn">Export & New</button>
-          <button class="btn btn-danger" id="clearAllBtn">Clear All</button>
+
+        <!-- Quick Actions -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Export & Manage</div>
+            </div>
+          </div>
+          <div class="quick-actions">
+            <button class="btn btn-outline btn-sm" id="exportCsvBtn">Export CSV</button>
+            <button class="btn btn-outline btn-sm" id="copyTextBtn">Copy Text</button>
+            <button class="btn btn-outline btn-sm" id="exportStartNewBtn">Export & New</button>
+            <button class="btn btn-danger btn-sm" id="clearAllBtn">Clear All</button>
+          </div>
         </div>
       </div>
     </main>
@@ -1011,8 +1085,8 @@
       <div class="modal-body">
         <div class="edit-form-grid" id="editForm"></div>
         <div style="display:flex;gap:8px;margin-top:12px;">
-          <button class="btn btn-primary" id="saveEditBtn" style="flex:1;">Save</button>
-          <button class="btn btn-outline" id="cancelEditBtn" style="flex:1;">
+          <button class="btn btn-primary btn-sm" id="saveEditBtn" style="flex:1;">Save</button>
+          <button class="btn btn-outline btn-sm" id="cancelEditBtn" style="flex:1;">
             Cancel
           </button>
         </div>
@@ -1319,7 +1393,7 @@
         activity: "Arrived",
         workDetails: "Parked at Jobsite",
         timeStamps: arrivedTimeStr,
-        duration: "2:00:00",
+        duration: "",
         poleAttachments: "",
         dgAnchors: "",
         project: projectName,
@@ -1335,7 +1409,7 @@
         activity: "Setup",
         workDetails: "Equip. and plan route",
         timeStamps: setupTimeStr,
-        duration: "0:15:00",
+        duration: "",
         poleAttachments: "",
         dgAnchors: "",
         project: projectName,
@@ -1648,20 +1722,3 @@
   </script>
 </body>
 </html>
-```
-
-**Key Changes:**
-
-✅ **Auto-Calculate Duration** - Each entry's duration = time from that entry to the next entry
-✅ **Smart Time Parsing** - Parses "HH:MM:SS AM/PM" format
-✅ **Updates on Every Change** - Recalculates whenever you add/edit/delete entries
-✅ **Last Entry = Empty Duration** - No next entry means no duration
-✅ **Handles Day Boundaries** - If time goes from 11:00 PM to 1:00 AM, calculates correctly
-✅ **Shows in Recent Entry** - Duration displays prominently in the most recent entry card
-✅ **Exports to CSV** - Duration column includes calculated values
-
-Now when you add entries:
-- **Entry 1**: 9:00 AM (Traveling)
-- **Entry 2**: 11:00 AM (Arrived) → Duration auto-fills as 2:00:00
-- **Entry 3**: 11:15 AM (Setup) → Duration auto-fills as 0:15:00
-- **Entry 4**: 11:30 AM (P1) → Duration shows 0:00:00 (no next entry yet, will calculate when you add the next one)
