@@ -906,7 +906,37 @@
                 </div>
               </div>
 
+              <!-- Primary Pole Fields -->
               <div id="primaryFields">
+                <div class="form-group">
+                  <label class="form-label">Work Type</label>
+                  <div class="radio-group">
+                    <label class="chip">
+                      <input type="radio" name="primaryWorkType" value="pole" id="workPole" checked />
+                      Pole
+                    </label>
+                    <label class="chip">
+                      <input type="radio" name="primaryWorkType" value="span" id="workSpan" />
+                      Span Work
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group" id="spanDirectionGroup" style="display:none;">
+                  <label class="form-label" for="spanDirection">Direction + Span</label>
+                  <select id="spanDirection" class="form-control">
+                    <option value="">Select span...</option>
+                    <option value="N Span">N Span</option>
+                    <option value="S Span">S Span</option>
+                    <option value="E Span">E Span</option>
+                    <option value="W Span">W Span</option>
+                    <option value="NE Span">NE Span</option>
+                    <option value="NW Span">NW Span</option>
+                    <option value="SE Span">SE Span</option>
+                    <option value="SW Span">SW Span</option>
+                  </select>
+                </div>
+
                 <div class="form-group">
                   <label class="form-label">Attachments</label>
                   <div class="checkbox-group">
@@ -940,20 +970,16 @@
                 </div>
               </div>
 
+              <!-- Adjacent Pole Fields -->
               <div id="adjacentFields" style="display:none;">
                 <div class="form-group">
-                  <label class="form-label" for="spanDirection">Direction + Span</label>
-                  <select id="spanDirection" class="form-control">
-                    <option value="">Select span...</option>
-                    <option value="s span">s span</option>
-                    <option value="nw span">nw span</option>
-                    <option value="ne span">ne span</option>
-                    <option value="e span">e span</option>
-                    <option value="sw span 1">sw span 1</option>
-                    <option value="sw span 2">sw span 2</option>
-                    <option value="w span">w span</option>
-                    <option value="se span">se span</option>
-                  </select>
+                  <label class="form-label" for="adjacentWorkDetails">Work Details</label>
+                  <input
+                    id="adjacentWorkDetails"
+                    class="form-control"
+                    type="text"
+                    placeholder="e.g., Inspected, Climbed, etc."
+                  />
                 </div>
               </div>
 
@@ -1150,14 +1176,12 @@
           
           if (currentTime !== null && nextTime !== null) {
             let duration = nextTime - currentTime;
-            // Handle case where next day (e.g., 11:00 PM to 1:00 AM next day)
             if (duration < 0) {
               duration += 24 * 60;
             }
             dataLog[i].duration = minutesToDuration(duration);
           }
         } else {
-          // Last entry has no duration (no next entry yet)
           dataLog[i].duration = '';
         }
       }
@@ -1183,7 +1207,6 @@
         return;
       }
 
-      // Get last 3 entries
       const lastThree = dataLog.slice(-3).reverse();
       
       container.innerHTML = '';
@@ -1303,7 +1326,20 @@
       }
 
       if (primary) {
-        workDetails = "pole";
+        // PRIMARY POLE
+        const isPole = document.querySelector('input[name="primaryWorkType"]:checked').value === "pole";
+        
+        if (isPole) {
+          workDetails = "Pole";
+        } else {
+          const spanDir = field("spanDirection").value;
+          if (!spanDir) {
+            alert("Please select a direction + span.");
+            return;
+          }
+          workDetails = spanDir;
+        }
+
         const attachments = [];
         if (field("attachTx").checked) attachments.push("Tx");
         if (field("attachDg").checked) attachments.push("DG");
@@ -1311,8 +1347,8 @@
         poleAttachments = attachments.join(", ");
         dgAnchors = field("dgAnchors").value;
       } else {
-        const spanDir = field("spanDirection").value;
-        workDetails = spanDir;
+        // ADJACENT POLE - no span data
+        workDetails = field("adjacentWorkDetails").value.trim() || "Adjacent pole";
       }
 
       dataLog.push({
@@ -1325,6 +1361,7 @@
         project: projectName,
       });
 
+      // Reset form
       field("poleId").value = "";
       field("poleTime").value = "";
       field("attachTx").checked = false;
@@ -1332,6 +1369,9 @@
       field("attachRiser").checked = false;
       field("dgAnchors").value = "";
       field("spanDirection").value = "";
+      field("adjacentWorkDetails").value = "";
+      document.getElementById("workPole").checked = true;
+      updatePrimaryWorkTypeVisibility();
       updateDgAnchorVisibility();
 
       calculateDurations();
@@ -1383,7 +1423,6 @@
 
       const now = new Date();
       
-      // Create Traveling entry
       const travelTime = now.toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
@@ -1399,7 +1438,6 @@
         project: projectName,
       });
 
-      // Create Arrived entry (2 hours later)
       const arrivedDate = new Date(now.getTime() + 2 * 60 * 60 * 1000);
       const arrivedTime = arrivedDate.toLocaleTimeString("en-US", {
         hour: "2-digit",
@@ -1416,7 +1454,6 @@
         project: projectName,
       });
 
-      // Create Setup entry (15 minutes after Arrived)
       const setupDate = new Date(arrivedDate.getTime() + 15 * 60 * 1000);
       const setupTime = setupDate.toLocaleTimeString("en-US", {
         hour: "2-digit",
@@ -1433,7 +1470,6 @@
         project: projectName,
       });
 
-      // Now calculate all durations
       calculateDurations();
       renderRecentEntries();
       renderLogTable();
@@ -1639,6 +1675,11 @@
       field("adjacentFields").style.display = primary ? "none" : "";
     }
 
+    function updatePrimaryWorkTypeVisibility() {
+      const isPole = document.querySelector('input[name="primaryWorkType"]:checked').value === "pole";
+      field("spanDirectionGroup").style.display = isPole ? "none" : "";
+    }
+
     function updateDgAnchorVisibility() {
       const show = field("attachDg").checked;
       field("dgAnchorField").style.display = show ? "" : "none";
@@ -1711,6 +1752,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       updateEntryTypeVisibility();
       updatePoleTypeVisibility();
+      updatePrimaryWorkTypeVisibility();
       updateDgAnchorVisibility();
       renderRecentEntries();
       renderLogTable();
@@ -1718,6 +1760,8 @@
       field("entryType").addEventListener("change", updateEntryTypeVisibility);
       field("primaryPole").addEventListener("change", updatePoleTypeVisibility);
       field("adjacentPole").addEventListener("change", updatePoleTypeVisibility);
+      document.getElementById("workPole").addEventListener("change", updatePrimaryWorkTypeVisibility);
+      document.getElementById("workSpan").addEventListener("change", updatePrimaryWorkTypeVisibility);
       field("attachDg").addEventListener("change", updateDgAnchorVisibility);
       field("githubSyncToggle").addEventListener("click", toggleGitHubPanel);
       field("connectGitHubBtn").addEventListener("click", connectGitHub);
